@@ -35,6 +35,12 @@ app.use('/api/campaign',campaignRoutes);
 app.use('/api/location',locationRoutes);
 app.use('/api/daily', dailyRoutes);
 
+app.get("/api/getkey", (req, res) =>{
+  console.log(process.env.RAZORPAY_KEY_ID);
+  res.status(200).json({ key: process.env.RAZORPAY_KEY_ID })
+}
+);
+
 
 if (process.env.NODE_ENV === 'production') {
   const __dirname = path.resolve();
@@ -49,11 +55,6 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-app.get("/api/getkey", (req, res) =>{
-  console.log(process.env.RAZORPAY_KEY_ID);
-  res.status(200).json({ key: process.env.RAZORPAY_KEY_ID })
-}
-);
 
 app.use(notFound);
 app.use(errorHandler);
