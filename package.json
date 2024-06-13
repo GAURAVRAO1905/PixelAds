@@ -9,7 +9,7 @@
     "server": "nodemon backend/server.js",
     "client": "npm run dev --prefix frontend",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "build": "npm install --prefix frontend --production = false && npm run build --prefix frontend && npm install  "
+    "build": "npm install --prefix frontend --production=false && npm run build --prefix frontend && npm install  "
   },
   "author": "Gaurav",
   "license": "MIT",
