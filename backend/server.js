@@ -49,8 +49,10 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-app.get("/api/getkey", (req, res) =>
+app.get("/api/getkey", (req, res) =>{
+  console.log(process.env.RAZORPAY_KEY_ID);
   res.status(200).json({ key: process.env.RAZORPAY_KEY_ID })
+}
 );
 
 app.use(notFound);
