@@ -175,7 +175,7 @@ const Hero = () => {
           <Card className='p-5 d-flex flex-column align-items-center hero-card bg-light w-75'>
             <h1 className='text-center mb-4'>PIXEL MATRIX</h1>
             <p className='text-center mb-4'>
-              This is a platform to show your advertisement to thw World. Join with us.
+              This is a platform to show your advertisement to the World. Join with us.
             </p>
             <div className='d-flex mb-4'>
               <Button variant='primary' href='/login' className='me-3'>
