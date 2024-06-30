@@ -6,6 +6,6 @@ import { uploadTextFile } from '../middleware/filemulterMiddleware.js';
 const router = express.Router();
 
 // Assuming 'dataFile' is the fieldname for your text file upload
-router.post('/upload', protect, uploadTextFile.single('dataFile'), uploadFile);
+router.post('/upload', uploadTextFile.single('dataFile'), uploadFile);
 
 export default router;
