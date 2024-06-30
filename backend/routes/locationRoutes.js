@@ -11,6 +11,6 @@ router.post('/create', protect, upload.array('mediaFile'), createLocation);
 // GET /api/location/places - Fetch all unique places
 router.get('/hotspots',protect, getHotspots);
 
-router.get('/hotspotdata', protect, getHotspotData);
+router.get('/hotspotdata', getHotspotData);
 
 export default router;
