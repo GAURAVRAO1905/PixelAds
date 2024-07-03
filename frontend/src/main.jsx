@@ -19,6 +19,7 @@ import PrivateRoute from './components/PrivateRoute.jsx';
 import CreateCampaignScreen from './screens/CreateCampaignScreen.jsx';
 import PaymentSuccess from './components/PaymentSuccess.jsx';
 import CreateLocationScreen from './screens/CreateLocation.jsx';
+import VehicleRegisterScreen from './screens/VehicleRegistration.jsx';
 
 
 
@@ -33,6 +34,7 @@ const router = createBrowserRouter(
         <Route path="/create" element={<CreateCampaignScreen/>} />
         <Route path="/paymentsuccess" element={<PaymentSuccess />} />
         <Route path="/location" element={<CreateLocationScreen/>} />
+        <Route path="/vehicle" element={<VehicleRegisterScreen/>} />
       </Route>
     </Route>
   )
