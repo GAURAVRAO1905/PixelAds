@@ -10,6 +10,7 @@ import userRoutes from './routes/userRoutes.js';
 import campaignRoutes from './routes/campaignRoutes.js';
 import locationRoutes from './routes/locationRoutes.js';
 import dailyRoutes from './routes/dailyRoutes.js';
+import vehicleRoutes from './routes/vehicleRoutes.js';
 import Razorpay from "razorpay";
 
 const port = process.env.PORT || 8000;
@@ -34,6 +35,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/campaign',campaignRoutes);
 app.use('/api/location',locationRoutes);
 app.use('/api/daily', dailyRoutes);
+app.use('/api/vehicle', vehicleRoutes);
 
 app.get("/api/getkey", (req, res) =>{
   console.log(process.env.RAZORPAY_KEY_ID);
