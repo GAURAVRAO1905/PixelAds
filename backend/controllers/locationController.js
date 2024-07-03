@@ -121,7 +121,7 @@ const getHotspotData = asyncHandler(async (req, res) => {
 
     let textContent = '';
     locationsWithImages.forEach((location) => {
-      textContent += `${location.latitude}, ${location.longitude}`;
+      textContent += `${location.latitude}, ${location.longitude},${location.radius}`;
       location.images.forEach((image) => {
         textContent += `, ${image._id}`;
       });
