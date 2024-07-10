@@ -15,12 +15,17 @@ const Hero = () => {
   const [checkOut, { isLoading: isLoadingCheckout }] = useCheckoutMutation();
   const [paymentVerification] = usePaymentVerificationMutation();
   const [key, setKey] = useState('pending');
-  const [filteredCampaigns, setFilteredCampaigns] = useState([]);
+  const [filteredCampaigns, setFilteredCampaigns] = useState({ pendingCampaigns: [], paidCampaigns: [] }); // Initialize with empty arrays
   const navigate = useNavigate();
 
   useEffect(() => {
     if (campaigns) {
-      setFilteredCampaigns(campaigns);
+      // Filter campaigns into pending and paid
+      const pendingCampaigns = campaigns.filter(campaign => campaign.paymentStatus === 'pending');
+      const paidCampaigns = campaigns.filter(campaign => campaign.paymentStatus === 'paid');
+      
+      console.log('Filtered Campaigns:', { pendingCampaigns, paidCampaigns });
+      setFilteredCampaigns({ pendingCampaigns, paidCampaigns });
     }
   }, [campaigns]);
 
@@ -93,6 +98,7 @@ const Hero = () => {
     }
   };
 
+ 
   return (
     <div className='py-5'>
       <Container className='d-flex flex-column align-items-center'>
@@ -102,28 +108,32 @@ const Hero = () => {
               <Loader />
             ) : campaignsError ? (
               <p>Alert: {campaignsError?.data?.message || campaignsError?.message || 'Unknown error'}</p>
-            ) : filteredCampaigns && filteredCampaigns.length > 0 ? (
+            ) : (filteredCampaigns.pendingCampaigns.length > 0 || filteredCampaigns.paidCampaigns.length > 0) ? (
               <Tabs
                 id="controlled-tab-example"
                 activeKey={key}
                 onSelect={(k) => setKey(k)}
                 className="mb-3"
               >
-                <Tab eventKey="pending" title="Pending">
-                  <PendingCampaigns
-                    campaigns={filteredCampaigns}
-                    isLoadingKey={isLoadingKey}
-                    isLoadingCheckout={isLoadingCheckout}
-                    keyError={keyError}
-                    checkoutHandler={checkoutHandler}
-                  />
-                </Tab>
-                <Tab eventKey="paid" title="Paid">
-                  <PaidCampaigns campaigns={filteredCampaigns} />
-                </Tab>
+                {filteredCampaigns.pendingCampaigns.length > 0 && (
+                  <Tab eventKey="pending" title="Pending">
+                    <PendingCampaigns
+                      campaigns={filteredCampaigns.pendingCampaigns}
+                      isLoadingKey={isLoadingKey}
+                      isLoadingCheckout={isLoadingCheckout}
+                      keyError={keyError}
+                      checkoutHandler={checkoutHandler}
+                    />
+                  </Tab>
+                )}
+                {filteredCampaigns.paidCampaigns.length > 0 && (
+                  <Tab eventKey="paid" title="Paid">
+                    <PaidCampaigns campaigns={filteredCampaigns.paidCampaigns} />
+                  </Tab>
+                )}
               </Tabs>
             ) : (
-              <p>You don't have any campaigns. <Button variant='primary' href='/create-campaign'>Create a Campaign</Button></p>
+              <p>You don't have any campaigns. </p>
             )}
           </>
         ) : (
