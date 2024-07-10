@@ -31,6 +31,8 @@ function isWithinRadius(lat1, lon1, lat2, lon2, radiusKm) {
 const uploadFile = asyncHandler(async (req, res) => {
   const filePath = path.join(__dirname, '../public/uploads', req.file.filename);
 
+  console.log(`Debug: File path - ${filePath}`);
+
   try {
     const { carId } = req.body; // Get carId from the request body
     if (!carId) {
@@ -39,6 +41,10 @@ const uploadFile = asyncHandler(async (req, res) => {
 
     if (!req.file) {
       return res.status(400).json({ message: 'No file uploaded' });
+    }
+
+    if (!fs.existsSync(filePath)) {
+      return res.status(400).json({ message: `File not found at ${filePath}` });
     }
 
     const data = fs.readFileSync(filePath, 'utf8');
