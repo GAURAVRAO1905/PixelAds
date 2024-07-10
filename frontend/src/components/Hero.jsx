@@ -1,13 +1,12 @@
-// Hero.js
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Card, Button, Tabs, Tab } from 'react-bootstrap';
+import { Container, Tabs, Tab, Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { useGetCampaignsByUserQuery, useGetKeyQuery, useCheckoutMutation, usePaymentVerificationMutation } from '../slices/campaignApiSlice';
 import Loader from './Loader';
-
-// Redux can be used to auto refresh the page whenever new campaign is created or payment is done 
+import PendingCampaigns from './PendingCampaigns';
+import PaidCampaigns from './PaidCampaigns';
+import NotLoggedIn from './NotLoggedIn';
 
 const Hero = () => {
   const { userInfo } = useSelector((state) => state.auth);
@@ -46,11 +45,10 @@ const Hero = () => {
         currency: "INR",
         name: "Your Company Name",
         description: "Campaign Payment",
-       // image: "https://your-company-logo-url.com/logo.png",
         order_id: order.id,
         handler: async function (response) {
           const data = {
-            campaignId, // Pass campaignId to payment verification
+            campaignId,
             orderCreationId: order.id,
             razorpayPaymentId: response.razorpay_payment_id,
             razorpayOrderId: response.razorpay_order_id,
@@ -59,21 +57,15 @@ const Hero = () => {
 
           const result = await paymentVerification(data).unwrap();
 
-          // Check if payment was successful and redirect accordingly
           if (result.success) {
-            // Redirect only if payment was successful and user is authenticated
             if (userInfo) {
               navigate(`/paymentsuccess?reference=${result.reference}`);
             } else {
               console.error('User is not authenticated');
-              // Handle not authenticated case
             }
           } else {
             console.error('Payment verification failed:', result.error);
-            // Handle payment failure
           }
-
-          //alert(result.msg);
         },
         prefill: {
           name: userInfo?.name,
@@ -89,7 +81,6 @@ const Hero = () => {
         modal: {
           ondismiss: function () {
             console.log('Checkout form closed');
-            // Handle the case where the checkout form is closed
             alert('Payment process cancelled');
           },
         },
@@ -119,52 +110,16 @@ const Hero = () => {
                 className="mb-3"
               >
                 <Tab eventKey="pending" title="Pending">
-                  <Container className='d-flex flex-wrap'>
-                    {filteredCampaigns
-                      .filter((campaign) => campaign.paymentStatus === 'pending')
-                      .map((campaign) => (
-                        <Card key={campaign._id} className='m-2' style={{ width: '18rem' }}>
-                          <Card.Body>
-                            <Card.Title>{campaign.campaignName}</Card.Title>
-                            <Card.Text>
-                              Start Date: {new Date(campaign.startDate).toLocaleDateString()}<br />
-                              End Date: {new Date(campaign.endDate).toLocaleDateString()}<br />
-                              Total Budget: ${campaign.totalBudget}
-                            </Card.Text>
-                            {isLoadingKey || isLoadingCheckout ? (
-                              <Loader />
-                            ) : keyError ? (
-                              <p>Error loading payment key: {keyError?.data?.message || keyError?.message || 'Unknown error'}</p>
-                            ) : (
-                              <Button 
-                                variant='primary' 
-                                onClick={() => checkoutHandler(campaign._id, campaign.totalBudget)}
-                              >
-                                Pay Now
-                              </Button>
-                            )}
-                          </Card.Body>
-                        </Card>
-                      ))}
-                  </Container>
+                  <PendingCampaigns
+                    campaigns={filteredCampaigns}
+                    isLoadingKey={isLoadingKey}
+                    isLoadingCheckout={isLoadingCheckout}
+                    keyError={keyError}
+                    checkoutHandler={checkoutHandler}
+                  />
                 </Tab>
                 <Tab eventKey="paid" title="Paid">
-                  <Container className='d-flex flex-wrap'>
-                    {filteredCampaigns
-                      .filter((campaign) => campaign.paymentStatus === 'paid')
-                      .map((campaign) => (
-                        <Card key={campaign._id} className='m-2' style={{ width: '18rem' }}>
-                          <Card.Body>
-                            <Card.Title>{campaign.campaignName}</Card.Title>
-                            <Card.Text>
-                              Start Date: {new Date(campaign.startDate).toLocaleDateString()}<br />
-                              End Date: {new Date(campaign.endDate).toLocaleDateString()}<br />
-                              Total Budget: ${campaign.totalBudget}
-                            </Card.Text>
-                          </Card.Body>
-                        </Card>
-                      ))}
-                  </Container>
+                  <PaidCampaigns campaigns={filteredCampaigns} />
                 </Tab>
               </Tabs>
             ) : (
@@ -172,21 +127,7 @@ const Hero = () => {
             )}
           </>
         ) : (
-          <Card className='p-5 d-flex flex-column align-items-center hero-card bg-light w-75'>
-            <h1 className='text-center mb-4'>PIXEL MATRIX</h1>
-            <p className='text-center mb-4'>
-              This is a platform to show your advertisement to the World. Join with us.
-            </p>
-            <div className='d-flex mb-4'>
-              <Button variant='primary' href='/login' className='me-3'>
-                Sign In
-              </Button>
-              <Button variant='secondary' href='/register'>
-                Register
-              </Button>
-            </div>
-            <p>Please log in to see your campaigns.</p>
-          </Card>
+            <NotLoggedIn />
         )}
       </Container>
     </div>
