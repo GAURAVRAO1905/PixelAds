@@ -15,16 +15,14 @@ const Hero = () => {
   const [checkOut, { isLoading: isLoadingCheckout }] = useCheckoutMutation();
   const [paymentVerification] = usePaymentVerificationMutation();
   const [key, setKey] = useState('pending');
-  const [filteredCampaigns, setFilteredCampaigns] = useState({ pendingCampaigns: [], paidCampaigns: [] }); // Initialize with empty arrays
+  const [filteredCampaigns, setFilteredCampaigns] = useState({ pendingCampaigns: [], paidCampaigns: [] });
   const navigate = useNavigate();
 
   useEffect(() => {
     if (campaigns) {
-      // Filter campaigns into pending and paid
       const pendingCampaigns = campaigns.filter(campaign => campaign.paymentStatus === 'pending');
       const paidCampaigns = campaigns.filter(campaign => campaign.paymentStatus === 'paid');
       
-      console.log('Filtered Campaigns:', { pendingCampaigns, paidCampaigns });
       setFilteredCampaigns({ pendingCampaigns, paidCampaigns });
     }
   }, [campaigns]);
@@ -98,7 +96,6 @@ const Hero = () => {
     }
   };
 
- 
   return (
     <div className='py-5'>
       <Container className='d-flex flex-column align-items-center'>
@@ -108,15 +105,15 @@ const Hero = () => {
               <Loader />
             ) : campaignsError ? (
               <p>Alert: {campaignsError?.data?.message || campaignsError?.message || 'Unknown error'}</p>
-            ) : (filteredCampaigns.pendingCampaigns.length > 0 || filteredCampaigns.paidCampaigns.length > 0) ? (
+            ) : (
               <Tabs
                 id="controlled-tab-example"
                 activeKey={key}
                 onSelect={(k) => setKey(k)}
                 className="mb-3"
               >
-                {filteredCampaigns.pendingCampaigns.length > 0 && (
-                  <Tab eventKey="pending" title="Pending">
+                <Tab eventKey="pending" title="Pending">
+                  {filteredCampaigns.pendingCampaigns.length > 0 ? (
                     <PendingCampaigns
                       campaigns={filteredCampaigns.pendingCampaigns}
                       isLoadingKey={isLoadingKey}
@@ -124,20 +121,22 @@ const Hero = () => {
                       keyError={keyError}
                       checkoutHandler={checkoutHandler}
                     />
-                  </Tab>
-                )}
-                {filteredCampaigns.paidCampaigns.length > 0 && (
-                  <Tab eventKey="paid" title="Paid">
+                  ) : (
+                    <p>No pending campaigns.</p>
+                  )}
+                </Tab>
+                <Tab eventKey="paid" title="Paid">
+                  {filteredCampaigns.paidCampaigns.length > 0 ? (
                     <PaidCampaigns campaigns={filteredCampaigns.paidCampaigns} />
-                  </Tab>
-                )}
+                  ) : (
+                    <p>No paid campaigns.</p>
+                  )}
+                </Tab>
               </Tabs>
-            ) : (
-              <p>You don't have any campaigns. </p>
             )}
           </>
         ) : (
-            <NotLoggedIn />
+          <NotLoggedIn />
         )}
       </Container>
     </div>
