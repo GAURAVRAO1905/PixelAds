@@ -22,7 +22,11 @@ const userSchema = mongoose.Schema(
         ref: "Campaign",
         required: true,
       }
-    ]
+    ],
+    isAdmin: {
+      type:Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
