@@ -16,13 +16,12 @@ import LoginScreen from './screens/LoginScreen.jsx';
 import RegisterScreen from './screens/RegisterScreen.jsx';
 import ProfileScreen from './screens/ProfileScreen.jsx';
 import PrivateRoute from './components/PrivateRoute.jsx';
+import AdminRoute from './components/AdminRoute.jsx'; // Import AdminRoute
 import CreateCampaignScreen from './screens/CreateCampaignScreen.jsx';
 import PaymentSuccess from './components/PaymentSuccess.jsx';
 import CreateLocationScreen from './screens/CreateLocation.jsx';
 import VehicleRegisterScreen from './screens/VehicleRegistration.jsx';
 import CampaignDetails from './components/CampaignDetails.jsx';
-
-
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -32,11 +31,13 @@ const router = createBrowserRouter(
       <Route path='/register' element={<RegisterScreen />} />
       <Route path='' element={<PrivateRoute />}>
         <Route path='/profile' element={<ProfileScreen />} />
-        <Route path="/create" element={<CreateCampaignScreen/>} />
-        <Route path="/paymentsuccess" element={<PaymentSuccess />} />
-        <Route path="/location" element={<CreateLocationScreen/>} />
-        <Route path="/vehicle" element={<VehicleRegisterScreen/>} />
-        <Route path="/campaigns/:id" element={<CampaignDetails />} />
+        <Route path='/create' element={<CreateCampaignScreen />} />
+        <Route path='/paymentsuccess' element={<PaymentSuccess />} />
+        <Route path='/campaigns/:id' element={<CampaignDetails />} />
+      </Route>
+      <Route path='' element={<AdminRoute />}>
+        <Route path='/location' element={<CreateLocationScreen />} />
+        <Route path='/vehicle' element={<VehicleRegisterScreen />} />
       </Route>
     </Route>
   )
