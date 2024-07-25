@@ -1,4 +1,3 @@
-// import { Navbar, Nav, Container, NavDropdown, Badge } from 'react-bootstrap';
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { FaSignInAlt, FaSignOutAlt } from 'react-icons/fa';
 import { LinkContainer } from 'react-router-bootstrap';
@@ -44,12 +43,16 @@ const Header = () => {
                     <LinkContainer to='/create'>
                       <NavDropdown.Item>Create Campaign</NavDropdown.Item>
                     </LinkContainer>
-                    <LinkContainer to='/location'>
-                      <NavDropdown.Item>Add/Update Location</NavDropdown.Item>
-                    </LinkContainer>
-                    <LinkContainer to='/vehicle'>
-                      <NavDropdown.Item>Vehicle Registration</NavDropdown.Item>
-                    </LinkContainer>
+                    {userInfo.isAdmin && (
+                      <>
+                        <LinkContainer to='/location'>
+                          <NavDropdown.Item>Add/Update Location</NavDropdown.Item>
+                        </LinkContainer>
+                        <LinkContainer to='/vehicle'>
+                          <NavDropdown.Item>Vehicle Registration</NavDropdown.Item>
+                        </LinkContainer>
+                      </>
+                    )}
                     <NavDropdown.Item onClick={logoutHandler}>
                       Logout
                     </NavDropdown.Item>
